@@ -1,0 +1,270 @@
+﻿@{
+Layout = null;
+}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Đặt vé - Hệ thống bán vé máy bay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+        }
+        /* Header với background hình */
+        .header {
+            position: relative;
+            background: url('https://khoinguonsangtao.vn/wp-content/uploads/2022/10/hinh-anh-may-bay.jpg') no-repeat center center/cover;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+            .header::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5); /* overlay tối */
+            }
+
+            .header h1,
+            .header p {
+                position: relative;
+                z-index: 1; /* để chữ nằm trên overlay */
+            }
+        /* Menu */
+        .menu {
+            background: #333;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+            .menu a {
+                text-decoration: none;
+                color: white;
+                font-weight: bold;
+                white-space: nowrap;
+            }
+
+                .menu a:hover {
+                    color: #FFD700;
+                }
+        /* Search box */
+        .search-container {
+            background: white;
+            width: 85%;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .search-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+
+            .search-row div {
+                flex: 1;
+                min-width: 150px;
+            }
+
+        .btn {
+            background: #0078D7;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            .btn:hover {
+                background: #005A9E;
+            }
+
+        /* Grid gợi ý vé */
+        .flight-suggestions {
+            width: 90%;
+            margin: 30px auto;
+        }
+
+            .flight-suggestions h2 {
+                margin-bottom: 15px;
+                color: #333;
+            }
+
+        .flight-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .flight-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+            transition: transform 0.3s;
+            cursor: pointer;
+        }
+
+            .flight-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .flight-card img {
+                width: 100%;
+                height: 160px;
+                object-fit: cover;
+            }
+
+        .card-info {
+            padding: 10px;
+            text-align: center;
+        }
+
+            .card-info p {
+                font-weight: bold;
+                margin: 0;
+                font-size: 16px;
+                color: #333;
+            }
+
+            .card-info span {
+                display: block;
+                margin-top: 5px;
+                color: #E60000;
+                font-weight: bold;
+            }
+
+        /* Footer */
+        .footer {
+            background: #333;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <!-- Header -->
+        <div class="header">
+            <h1>Hệ thống bán vé máy bay</h1>
+            <p>Nhanh chóng - Tiện lợi - An toàn</p>
+        </div>
+
+
+        <!-- Menu -->
+        <div class="menu">
+            <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+            <a href="@Url.Action("Booking", "Home")">Đặt vé</a>
+            <a href="@Url.Action("About", "Home")">Giới thiệu</a>
+            <a href="@Url.Action("Contact", "Home")">Liên hệ</a>
+            <a href="@Url.Action("Login", "Account")">Đăng nhập</a>
+            <a href="@Url.Action("Register", "Account")">Đăng ký</a>
+        </div>
+
+        <!-- Search box -->
+        <div class="search-container">
+            <h2>Tìm chuyến bay</h2>
+
+            <asp:RadioButtonList ID="rblType" runat="server" RepeatDirection="Horizontal">
+                <asp:ListItem Selected="True">Khứ hồi</asp:ListItem>
+                <asp:ListItem>Một chiều</asp:ListItem>
+            </asp:RadioButtonList>
+
+            <div class="search-row">
+                <div>
+                    <label>Điểm đi</label><br />
+                    <asp:TextBox ID="txtFrom" runat="server" />
+                </div>
+                <div>
+                    <label>Điểm đến</label><br />
+                    <asp:TextBox ID="txtTo" runat="server" />
+                </div>
+                <div>
+                    <label>Ngày đi</label><br />
+                    <asp:TextBox ID="txtDate" runat="server" TextMode="Date" />
+                </div>
+                <div>
+                    <label>Ngày về</label><br />
+                    <asp:TextBox ID="txtReturnDate" runat="server" TextMode="Date" />
+                </div>
+            </div>
+
+            <div class="search-row">
+                <div>
+                    <label>Số khách</label><br />
+                    <asp:TextBox ID="txtPassengers" runat="server" Text="1" />
+                </div>
+                <div>
+                    <label>Hạng vé</label><br />
+                    <asp:DropDownList ID="ddlClass" runat="server">
+                        <asp:ListItem>Phổ thông</asp:ListItem>
+                        <asp:ListItem>Thương gia</asp:ListItem>
+                        <asp:ListItem>Hạng nhất</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:15px;">
+                <asp:Button ID="btnSearch" runat="server" Text="Tìm chuyến bay" CssClass="btn" />
+            </div>
+        </div>
+
+        <!-- Danh sách gợi ý vé -->
+        <div class="flight-suggestions">
+            <h2>Gợi ý vé máy bay độc quyền</h2>
+            <div class="flight-grid">
+                <div class="flight-card">
+                    <img src="https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/04/anh-ha-noi.jpg" alt="Đà Nẵng - Hà Nội" />
+                    <div class="card-info">
+                        <p>Đà Nẵng → Hà Nội</p>
+                        <span>680.600 VND</span>
+                    </div>
+                </div>
+
+                <div class="flight-card">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e" alt="Phú Quốc - TP.HCM" />
+                    <div class="card-info">
+                        <p>TPHCM → Phú Quốc</p>
+                        <span>680.600 VND</span>
+                    </div>
+                </div>
+
+                <div class="flight-card">
+                    <img src="https://images.unsplash.com/photo-1505761671935-60b3a7427bad" alt="TP.HCM - Bangkok" />
+                    <div class="card-info">
+                        <p>TP.HCM → Bangkok</p>
+                        <span>1.430.134 VND</span>
+                    </div>
+                </div>
+
+                <div class="flight-card">
+                    <img src="https://vietluxtour.com/Upload/images/2024/khamphatrongnuoc/%C4%91%E1%BB%8Ba%20%C4%91i%E1%BB%83m%20du%20l%E1%BB%8Bch%20%C4%91%C3%A0%20n%E1%BA%B5ng/dia-diem-du-lich-da-nang-main-min.jpg" alt="TP.HCM - Đà Nẵng" />
+                    <div class="card-info">
+                        <p>TP.HCM → Đà Nẵng</p>
+                        <span>680.600 VND</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            &copy; 2025 - Hệ thống bán vé máy bay.
+        </div>
+    </form>
+</body>
+</html>

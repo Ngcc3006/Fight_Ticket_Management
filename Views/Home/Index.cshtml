@@ -1,0 +1,274 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Trang Chủ - Hệ thống bán vé máy bay</title>
+    <style>
+        /*toàn trang*/
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f0f4f8; /* nền nhẹ */
+            color: #333;
+        }
+
+        /* Header với ảnh nền */
+        .header {
+            background: url('https://hoanghamobile.com/tin-tuc/wp-content/uploads/2024/06/hinh-anh-may-bay.jpg') no-repeat center center;
+            background-size: cover;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.6);
+            position: relative; /* để menu absolute bám vào */
+        }
+
+            .header h1 {
+                font-size: 42px;
+                margin: 0;
+            }
+
+            .header p {
+                font-size: 20px;
+                margin-top: 10px;
+            }
+
+        /* --- Menu overlay nằm trên ảnh --- */
+        .menu {
+            background: rgba(0, 0, 0, 0.6); /* nền mờ trong suốt */
+            padding: 12px;
+            text-align: center;
+            position: absolute; /* bám vào header */
+            bottom: 0; /* nằm sát dưới ảnh */
+            width: 100%;
+        }
+
+            .menu a {
+                margin: 0 18px;
+                text-decoration: none;
+                color: #fff;
+                font-weight: 600;
+                font-size: 16px;
+                transition: 0.3s;
+            }
+
+                .menu a:hover {
+                    color: #ffcc00;
+                    border-bottom: 2px solid #ffcc00; /* hover có gạch chân vàng */
+                }
+
+        /* --- Box tìm chuyến bay bên trái --- */
+        .search-box {
+            background: white;
+            width: 100%;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+            transition: transform 0.2s ease-in-out;
+        }
+
+            .search-box:hover {
+                transform: translateY(-5px); /* hover nhích lên */
+            }
+
+            .search-box h2 {
+                color: #0078D7;
+                border-left: 5px solid #0078D7;
+                padding-left: 10px;
+                margin-bottom: 15px;
+            }
+
+        /* --- Nút tìm chuyến bay --- */
+        .btn {
+            background: linear-gradient(90deg, #0078D7, #00AEEF);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            cursor: pointer;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+            .btn:hover {
+                background: linear-gradient(90deg, #005A9E, #0078D7);
+                transform: scale(1.05);
+            }
+        /* --- Layout 2 cột: trái (form), phải (tin tức) --- */
+        .main-content {
+            display: flex;
+            gap: 20px;
+            margin: 20px auto;
+            width: 90%;
+        }
+
+        .left-box {
+            flex: 1;
+        }
+        /* bên trái chiếm hết chỗ */
+        .right-box {
+            width: 380px; /* cố định chiều rộng */
+            background: #fff;
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+            /* --- Tiêu đề tin tức nổi bật --- */
+            .right-box h2 {
+                color: #ff6600;
+                border-bottom: 2px solid #ff6600;
+                padding-bottom: 6px;
+                margin-bottom: 15px;
+                font-size: 20px;
+            }
+        /* --- Mỗi tin tức --- */
+        .news-item {
+            display: flex;
+            margin-bottom: 15px;
+            transition: transform 0.2s ease;
+        }
+
+            .news-item:hover {
+                transform: scale(1.02); /* --- Mỗi tin tức --- */
+            }
+
+            .news-item img {
+                width: 120px;
+                height: 70px;
+                object-fit: cover;
+                border-radius: 6px;
+                margin-right: 12px;
+            }
+
+            .news-item p {
+                font-size: 14px;
+                color: #444;
+                margin: 0;
+            }
+
+        /* --- Footer --- */
+        .footer {
+            background: #222;
+            color: #ccc;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+            .footer:hover {
+                color: #fff; /* hover sáng chữ */
+            }
+    </style>
+</head>
+
+<body>
+    <form id="form1" runat="server">
+        <!-- ==== Header + Menu ==== -->
+        <div class="header">
+            <h1>Hệ thống bán vé máy bay</h1>
+            <p>Nhanh chóng - Tiện lợi - An toàn</p>
+            <!-- Menu nằm overlay trên ảnh -->
+            <div class="menu">
+                <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+                <a href="@Url.Action("Booking", "Home")">Đặt vé</a>
+                <a href="@Url.Action("About", "Home")">Giới thiệu</a>
+                <a href="@Url.Action("Contact", "Home")">Liên hệ</a>
+                <a href="@Url.Action("Login", "Account")">Đăng nhập</a>
+                <a href="@Url.Action("Register", "Account")">Đăng ký</a>
+            </div>       
+        </div>
+
+        <!-- ==== Nội dung chính (2 cột) ==== -->
+        <div class="main-content">
+            <!-- ====== Cột trái: form tìm chuyến bay ====== -->
+            <div class="left-box">
+                <div class="search-box">
+                    <h2>Tìm chuyến bay</h2>
+                    <!-- Chọn loại vé -->
+                    <asp:RadioButtonList ID="rblType" runat="server" RepeatDirection="Horizontal">
+                        <asp:ListItem Selected="True">Khứ hồi</asp:ListItem>
+                        <asp:ListItem>Một chiều</asp:ListItem>
+                    </asp:RadioButtonList>
+                    <!-- Nhập điểm đi -->
+                    <div style="margin-top:10px;">
+                        <label>Điểm đi:</label><br />
+                         <input type="text" id="txtFrom" name="txtFrom" class="form-control" />
+                    </div>
+                    <!-- Nhập điểm đến -->
+                    <div style="margin-top:8px;">
+                        <label>Điểm đến:</label><br />
+                        <asp:TextBox ID="txtTo" runat="server" />
+                    </div>
+                    <!-- Ngày đi & Ngày về -->
+                    <div style="display:flex; gap:10px; margin-top:8px;">
+                        <div>
+                            <label>Ngày đi:</label><br />
+                            <asp:TextBox ID="txtDate" runat="server" TextMode="Date" />
+                        </div>
+                        <div>
+                            <label>Ngày về:</label><br />
+                            <asp:TextBox ID="txtReturnDate" runat="server" TextMode="Date" />
+                        </div>
+                    </div>
+                    <!-- Số lượng người lớn -->
+                    <div style="margin-top:8px;">
+                        <label>Người lớn:</label>
+                        <asp:TextBox ID="txtAdults" runat="server" Text="1" Style="width:60px;" />
+                    </div>
+                    <!-- Số lượng trẻ em -->
+                    <div style="margin-top:8px;">
+                        <label>Trẻ em:</label>
+                        <asp:TextBox ID="txtChildren" runat="server" Text="0" Style="width:60px;" />
+                    </div>
+                    <!-- Mã khuyến mại -->
+                    <div style="margin-top:8px;">
+                        <label>Mã khuyến mại:</label><br />
+                        <asp:TextBox ID="txtPromo" runat="server" />
+                    </div>
+                    <!-- Tích chọn tìm vé rẻ -->
+                    <div style="margin-top:8px;">
+                        <asp:CheckBox ID="chkCheap" runat="server" Text="Tìm vé rẻ nhất" />
+                    </div>
+                    <!-- Nút tìm chuyến bay -->
+                    <div style="text-align:center; margin-top:15px;">
+                        <asp:Button ID="btnSearch" runat="server" Text="Tìm chuyến bay" CssClass="btn" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====== Cột phải: tin tức nổi bật ====== -->
+            <div class="right-box">
+                <h2>Tin nổi bật</h2>
+                <!-- Tin tức 1 -->
+                <div class="news-item">
+                    <img src="https://oritoeicdreamjob.com/upload/images/320190622164852.png" alt="news1" />
+                    <p>Phong cách người dẫn đầu, đặc quyền dành cho hạng thương gia, ưu đãi 20% ngày 2 & 20 hàng tháng</p>
+                </div>
+                <!-- Tin tức 2 -->
+                <div class="news-item">
+                    <img src="https://vj-prod-website-cms.s3.ap-southeast-1.amazonaws.com/vie4bannert-1751517331784.jpg" alt="news2" />
+                    <p>Bay đẳng cấp Boss, giá chỉ Eco, ưu đãi 20% ngày 2 & 20 hàng tháng</p>
+                </div>
+                <!-- Tin tức 3 -->
+                <div class="news-item">
+                    <img src="https://bcp.cdnchinhphu.vn/thumb_w/640/334894974524682240/2024/5/3/888-1578475996-4245-1578566639png1-17147148198602110422138.png" alt="news3" />
+                    <p>“12h rồi, săn vé 0 đồng cùng Vietjet mỗi ngày vàng 12h-14h”</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            &copy; 2025 - Hệ thống bán vé máy bay. Mọi quyền được bảo lưu.
+        </div>
+    </form>
+</body>
+</html>
